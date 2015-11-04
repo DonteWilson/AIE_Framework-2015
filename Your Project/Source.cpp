@@ -15,6 +15,8 @@ int wmain()
 
 	oGameLoop.Loop();
 
+
+
 	Graphics::Quit();
 
 	return 0;
