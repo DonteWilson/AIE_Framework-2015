@@ -6,6 +6,8 @@ int FPS = 255;
 int speed = 100;
 int ax = 750;
 int ay = 400;
+int x;
+int y;
 SDL_Keycode key;
 void GameLoop::Loop()
 {
@@ -16,19 +18,33 @@ void GameLoop::Loop()
 		SDL_Event sdlEvent; // Will hold the next event to be parsed
 
 
-			while (SDL_PollEvent(&sdlEvent))
-			{
-				// Calls the redefined event function for the EventHandler class
-				// Refer to its header file and cpp for more information on what each inherited function is capable of
-				// and its syntax
-				OnEvent(sdlEvent);
-			}
-			Update();
-			LateUpdate();
-			
-			Graphics::DrawRect({ 400, 400 }, { 450, 400 }, { 173,155,34,255 });
-			Graphics::DrawRect({ 100,100 }, { 500,500 }, { 740,131,189,58 });
+		while (SDL_PollEvent(&sdlEvent))
+		{
+			// Calls the redefined event function for the EventHandler class
+			// Refer to its header file and cpp for more information on what each inherited function is capable of
+			// and its syntax
+			OnEvent(sdlEvent);
+		}
+		Update();
+		LateUpdate();
 
+		/*Graphics::DrawRect({ 400, 400 }, { 450, 400 }, { 173,155,34,255 });
+		Graphics::DrawRect({ 100,100 }, { 500,500 }, { 740,131,189,58 });*/
+		
+		Graphics::DrawLine({ 1400,0 }, { 300,800 }, { 225,225,225,225 });
+		//Verticle Stuff
+		/*Graphics::DrawLine({ 300,0 }, { 1400,600 }, { 225,225,225,225 });*/
+		for (float x = 300; x <= 1400; x = x + 100)
+		{
+			Graphics::DrawLine({ x, 0 }, { x, 800 }, { 225,225,225,225 });
+		}
+		
+		//Horizontal Stuff
+		/*Graphics::DrawLine({ 300, 600 }, { 1400,600 }, { 225,225,225,225 });*/
+		for (float y = 0; y <= 1300; y = y + 100)
+		{
+			Graphics::DrawLine({ 300, y }, { 1400, y }, { 225,225,225,225 });
+		}
 			Graphics::DrawPoint({ 5, 5 }, { 255, 255, 255, 255 });
 
 			Graphics::DrawRing({ 140, 140 }, 50, 25, { 50, 0, 200, 255 });
