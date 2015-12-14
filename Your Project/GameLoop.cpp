@@ -6,10 +6,13 @@ void Ball(int &ball, int deltaTime, int moved)
 {
 	ball -= moved *deltaTime;
 }
+
 int RorySucks = 0;
 int up;
 int down;
 int up2;
+float ax = 300;
+float ax2 = 600;
 int by = 400;
 int down2;
 int ball = 250;
@@ -20,9 +23,9 @@ int deltaTime = 0;
 float ay = 300;
 float ay2 = 300;
 int moved = 10;
-int ax;
 bool p1w = false;
 bool p1d = false;
+bool collide = false;
 int P1score = -1;
 int P2score = 0;
 float x = 50;
@@ -35,8 +38,8 @@ SDL_Keycode key;
 
 void GameLoop::Loop()
 {
-	
-	
+
+
 	while (m_bRunning)
 	{
 		SDL_Event sdlEvent; // Will hold the next event to be parsed
@@ -51,76 +54,99 @@ void GameLoop::Loop()
 		}
 		Update();
 
-		
+
 		LateUpdate();
 
 		/*Graphics::DrawRect({ 400, 400 }, { 450, 400 }, { 173,155,34,255 });
 		Graphics::DrawRect({ 100,100 }, { 500,500 }, { 740,131,189,58 });*/
-		
+
 		/*Graphics::DrawLine({ 1400,0 }, { 300,800 }, { 225,225,225,225 });*/
 		//Verticle Stuff
-		Graphics::DrawLine({ 100,0 }, { 1500,600 }, { 740,131,189,68 });
+		/*Graphics::DrawLine({ 100,0 }, { 1500,600 }, { 740,131,189,68 });
 		for (float x = 100; x <= 1500; x = x + 100)
 		{
 			Graphics::DrawLine({ x, 0 }, { x, 1000 }, { 740,131,189,68 });
-		}
-	
+		}*/
+
 		//Horizontal Stuff
-		Graphics::DrawLine({ 100, 600 }, { 1500,600 }, { 225,225,225,225 });
+		/*Graphics::DrawLine({ 100, 600 }, { 1500,600 }, { 225,225,225,225 });
 		for (float y = 0; y <= 1500; y = y + 100)
 		{
 			Graphics::DrawLine({ 100, y }, { 1500, y }, { 225,225,225,225 });
 		}
-			Graphics::DrawRect({ 0, ay }, { 50, 200 }, { 164,0,96,161 });
-			Graphics::DrawRect({ 1550,ay2 }, { 50, 200 }, { 164,0,96,161 });
-			Graphics::DrawPoint({ 5, 5 }, { 255, 255, 255, 255 });
+		*/
+		Graphics::DrawRect({ ax, ay }, { 200, 200 }, { 225,225,225,225 });
+		Graphics::DrawRect({ ax2,ay2 }, { 200, 200 }, { 0,0,252,255 });
+		/*Graphics::DrawPoint({ 5, 5 }, { 255, 255, 255, 255 });*/
 
-			
-			/*Graphics::DrawRing({ 140, 140 }, 50, 25, { 50, 0, 200, 255 });*/
-			Graphics::DrawCircle({ ball,by}, 10, 100, { 173,155,34,225 });
-			
 
+		/*Graphics::DrawRing({ 140, 140 }, 50, 25, { 50, 0, 200, 255 });*/
+		/*Graphics::DrawCircle({ ball,by}, 10, 100, { 173,155,34,225 });*/
+
+
+
+
+		if (up == 1)
+		{
+			if (ay <= 0)
+			{
+				ay = 0;
+			}
+			ay -= 20;
+		}
+		if (down == 1)
+		{
+			if (ay >= 700)
+			{
+				ay = 700;
+			}
+			ay += 20;
+		}
+		if (up2 == 1)
+		{
+			if (ay2 <= 0)
+			{
+				ay2 = 0;
+			}
+			ay2 -= 20;
+		}
+		if (down2 == 1)
+		{
+			if (ay2 >= 700)
+			{
+				ay2 = 700;
+			}
+			ay2 += 20;
+		}
+		if ((ay2 >= ay) && (ay >= ay2))
+		{
+			Graphics::DrawRect({ ax2,ay2 }, { 200, 200 }, { 0,0,252,255 });
+		}
+		if ((ay >= ay2) && (ay2 >= ay))
+		{
+			Graphics::DrawRect({ ax, ay }, { 200, 200 }, { 225,225,225,225 });
+		}
+		if ((ax2 >= ax) && (ax >= ax2))
+		{
+			Graphics::DrawRect({ ax2,ay2 }, { 200, 200 }, { 0,0,252,255 });
+		}
+		if ((ax >= ax2) && (ax2 >= ax))
+		{
+			Graphics::DrawRect({ ax, ay2 }, { 200, 200 }, { 0,0,252,255 });
+		}
+		if ((ay2 == ay) && (ay == ay2))
+		{
+		
+		}
 			Graphics::Flip(); // Required to update the window with all the newly drawn content
-
-			if (up == 1)
-			{
-				if (ay <= 0)
-				{
-					ay = 0;
-				}
-				ay -= 20;
-			}
-			if (down == 1)
-			{
-				if (ay >= 700)
-				{
-					ay = 700;
-				}
-				ay += 20;
-			}
-			if (up2 == 1)
-			{
-				if (ay2 <= 0)
-				{
-					ay2 = 0;
-				}
-				ay2 -= 20;
-			}
-			if (down2 == 1)
-			{
-				if (ay2 >= 700)
-				{
-					ay2 = 700;
-				}
-				ay2 += 20;
-			}
 		}
 	}
+	
 
 /*int ex = 200;*/
 void GameLoop::Update()
 {
-	currentTime = clock();
+	/*currentTime = clock();
 	deltaTime = (currentTime - previousTime) / 10;
 	std::cout << deltaTime << endl;
 
@@ -186,16 +212,16 @@ void GameLoop::Update()
 	{
 		Ball(ball, deltaTime, moved);
 	}
-	else if (ball >= 1610) { ball = 800; by = 500; stop = false; go = false; }
+	else if (ball >= 1500) { ball = 800; by = 500; stop = false; go = false; }
 	else if (ball <= -10) { ball = 800; by = 500; stop = false; go = false; }
 
 	if (p1w) { if (y > 0) { y -= 10 * deltaTime; } }
-	if (p1d) { if (y < 800) y += 10 * deltaTime; }
+	if (p1d) { if (y < 800) y += 10 * deltaTime; }*/
 
 }
 void GameLoop::LateUpdate()
 {
-	/*key = KMOD_NONE;*/
+	key = KMOD_NONE;
 }
 
 
@@ -218,6 +244,10 @@ void GameLoop::OnKeyDown(const SDL_Keycode ac_sdlSym, const Uint16 ac_uiMod, con
 	case SDLK_DOWN: down2 = 1; break;
 	case SDLK_w: up = 1; break;
 	case SDLK_s: down = 1; break;
+	case SDLK_d: ax += 20; break;
+	case SDLK_a: ax -= 20; break;
+	case SDLK_LEFT: ax2 -= 20; break;
+	case SDLK_RIGHT: ax2 += 20; break;
 	
 		
 	case SDLK_ESCAPE: m_bRunning = false; break; // End the loop
@@ -237,7 +267,8 @@ void GameLoop::OnKeyUp(const SDL_Keycode ac_sdlSym, const Uint16 ac_uiMod, const
 	case SDLK_DOWN: down2 = 0; break;
 	case SDLK_w: up = 0; break;
 	case SDLK_s: down = 0; break;
-
+	
+		
 	case SDLK_ESCAPE: m_bRunning = false; break;
 
 	default:
